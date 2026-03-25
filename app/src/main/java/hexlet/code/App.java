@@ -15,14 +15,14 @@ import java.util.concurrent.Callable;
         description = "Compares two configuration files and shows a difference.")
 class Differ implements Callable<Integer> {
 
-//    @Parameters(index = "0", description = "The file whose checksum to calculate.")
-//    private File file;
-
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "Show this help message and exit.")
     private boolean help = false;
 
     @Option(names = { "-V", "--version" }, description = "Print version information and exit.")
     private boolean version = false;
+
+    @Option(names = {"-f", "--format"}, paramLabel = "FORMAT", description = "output format [default: stylish].")
+    private String format = "stylish ";
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
