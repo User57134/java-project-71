@@ -1,5 +1,4 @@
 plugins {
-    id("com.github.ben-manes.versions") version "0.53.0"
     id("java")
     application
 }
@@ -17,7 +16,7 @@ application {
 
 dependencies {
     implementation("info.picocli:picocli:4.7.7")
-
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.2")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
