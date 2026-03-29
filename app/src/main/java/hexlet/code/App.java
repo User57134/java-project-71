@@ -7,14 +7,13 @@ import picocli.CommandLine.Parameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 class Differ implements Callable<Integer> {
     private static ObjectMapper mapper = new ObjectMapper();
 
-    private static Map<String,Object> getData(String filename) throws Exception {
+    private static Map<String, Object> getData(String filename) throws Exception {
         var p = Paths.get(filename);
         var content = Files.readString(p);
 
@@ -32,7 +31,7 @@ class Differ implements Callable<Integer> {
             throw new RuntimeException("Invalid argument: " + filename);
         }
 
-        return mapper.readValue(content, new TypeReference<Map<String,Object>>(){});
+        return mapper.readValue(content, new TypeReference<Map<String, Object>>() { });
     }
 
     private static String diffAsString(List<String> diff) {
@@ -71,6 +70,9 @@ class Differ implements Callable<Integer> {
     public Integer call() throws Exception { // your business logic goes here...
         //String filename1 = "src/main/resources/file1.json";
         //String filename2 = "src/main/resources/file2.json";
+        if ((filepath1.isEmpty()) || (filepath2.isEmpty())) {
+            return -1;
+        }
 
         var content1 = getData(filepath1);
         var content2 = getData(filepath2);
@@ -97,12 +99,8 @@ class Differ implements Callable<Integer> {
                 .entrySet()
                 .stream()
                 .filter(el -> {
-                    if ((!content1.containsKey(el.getKey()))
-                            || (!el.getValue().equals(content1.get(el.getKey())))) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return ((!content1.containsKey(el.getKey()))
+                            || (!el.getValue().equals(content1.get(el.getKey()))));
                 })
                 // make a map with a surrogate keys (_p) to sort it by value with the special rules:
                 // - first is a line without changes
@@ -120,7 +118,7 @@ class Differ implements Callable<Integer> {
         var diff = result.entrySet()
                 .stream()
                 .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
-                .map( el -> {
+                .map(el -> {
                     if (el.getKey().endsWith("_m")) {
                         return "- " + el.getValue();
                     } else if (el.getKey().endsWith("_p")) {
