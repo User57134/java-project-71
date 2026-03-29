@@ -1,0 +1,8 @@
+{"version": 2, "width": 161, "height": 12, "timestamp": 1774791172, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}}
+[0.0238, "o", "\u001b[?2004h\u001b]0;stl@DESKTOP-B887B9J: ~/projects/edu/projects/2/java-project-71/app\u0007\u001b[01;32mstl@DESKTOP-B887B9J\u001b[00m:\u001b[01;34m~/projects/edu/projects/2/java-project-71/app\u001b[00m$ "]
+[3.893288, "o", "\u001b[7m ./build/install/app/bin/app ~/test/pr2/file1.json ~/test/pr2/file2.json\u001b[27m"]
+[10.379801, "o", "\r\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C ./build/install/app/bin/app ~/test/pr2/file1.json ~/test/pr2/file2.json\r\n\u001b[?2004l\r"]
+[11.153314, "o", "Current working directory: /home/stl/projects/edu/projects/2/java-project-71/app\r\n"]
+[11.960901, "o", "{\r\n- follow: false\r\n  host: hexlet.io\r\n- proxy: 123.234.53.22\r\n- timeout: 50\r\n+ timeout: 20\r\n+ verbose: true\r\n}\r\n"]
+[12.109025, "o", "\u001b[?2004h\u001b]0;stl@DESKTOP-B887B9J: ~/projects/edu/projects/2/java-project-71/app\u0007\u001b[01;32mstl@DESKTOP-B887B9J\u001b[00m:\u001b[01;34m~/projects/edu/projects/2/java-project-71/app\u001b[00m$ "]
+[15.599458, "o", "\u001b[?2004l\r\r\nexit\r\n"]

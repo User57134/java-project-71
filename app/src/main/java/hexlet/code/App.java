@@ -14,15 +14,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
+
 
 @Command(name = "gendiff", mixinStandardHelpOptions = true, version = "checksum 4.0",
         description = "Compares two configuration files and shows a difference.")
 class Differ implements Callable<Integer> {
     private static ObjectMapper mapper = new ObjectMapper();
 
-    public static Map<String,Object> getData(String filename) throws Exception {
+    private static Map<String,Object> getData(String filename) throws Exception {
         var p = Paths.get(filename);
         var content = Files.readString(p);
 
@@ -31,6 +33,22 @@ class Differ implements Callable<Integer> {
         }
 
         return mapper.readValue(content, new TypeReference<Map<String,Object>>(){});
+    }
+
+    private static String diffAsString(List<String> diff) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("{");
+        builder.append("\n");
+
+        for (var line : diff) {
+            builder.append(line);
+            builder.append("\n");
+        }
+
+        builder.append("}");
+
+        return builder.toString();
     }
 
 
@@ -51,15 +69,73 @@ class Differ implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
-        String filename1 = "src/main/resources/file1.json";
-        String filename2 = "src/main/resources/file2.json";
+        //String filename1 = "src/main/resources/file1.json";
+        //String filename2 = "src/main/resources/file2.json";
 
-        var content1 = getData(filename1);
-        var content2 = getData(filename2);
+        var content1 = getData(filepath1);
+        var content2 = getData(filepath2);
 
-        System.out.println((content1.equals(content2)) ? "files are equal" : "files are not equal");
+        // lines, that were removed and lines with no changes
+        var res1 = content1.entrySet()
+                .stream()
+                // make a map with a surrogate keys (_m) to sort it by value with the special rules:
+                // - first is a line without changes
+                // - second is a removed line
+                // - third is an added line
+                .collect(Collectors.toMap(el -> {
+                    if ((content2.containsKey(el.getKey()))
+                            && (el.getValue().equals(content2.get(el.getKey())))) {
+                        return el.getKey();
+                    } else {
+                        return el.getKey() + "_m";
+                    }
 
-        return null;
+                }, el -> el.getKey() + ": " + el.getValue()));
+
+        // lines, that were added
+        var res2 = content2
+                .entrySet()
+                .stream()
+                .filter(el -> {
+                    if ((!content1.containsKey(el.getKey()))
+                            || (!el.getValue().equals(content1.get(el.getKey())))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+                // make a map with a surrogate keys (_p) to sort it by value with the special rules:
+                // - first is a line without changes
+                // - second is a removed line
+                // - third is an added line
+                .collect(Collectors.toMap(el -> {
+                    return el.getKey() + "_p";
+                }, el -> el.getKey() + ": " + el.getValue()));
+
+        var result = new HashMap<String, String>();
+        result.putAll(res1);
+        result.putAll(res2);
+
+        // make a sorted list of changes
+        var diff = result.entrySet()
+                .stream()
+                .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
+                .map( el -> {
+                    if (el.getKey().endsWith("_m")) {
+                        return "- " + el.getValue();
+                    } else if (el.getKey().endsWith("_p")) {
+                        return "+ " + el.getValue();
+                    } else {
+                        return "  " + el.getValue();
+                    }
+                })
+                .toList();
+
+        var sdiff = diffAsString(diff);
+
+        System.out.println(sdiff);
+
+        return 0;
     }
 }
 
