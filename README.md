@@ -7,7 +7,9 @@
 The project for comparing two files and get differences. A CLI is used to interact with a user.
 
 ## Setup
-
+```bash
+make run-dist
+```
 
 ## Run
 
