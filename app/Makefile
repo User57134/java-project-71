@@ -1,17 +1,5 @@
-.PHONY: clean build dist run-dist
+.PHONY: build
 
 
-run-dist: dist
+run-dist:
 	./build/install/app/bin/app
-
-
-dist:
-	./gradlew installDist
-
-
-build: clean
-	./gradlew build
-
-
-clean:
-	./gradlew clean
