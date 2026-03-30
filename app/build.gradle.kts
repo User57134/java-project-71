@@ -2,6 +2,7 @@ plugins {
     id("java")
     application
     checkstyle
+    id("org.sonarqube") version "7.2.3.7755"
 }
 
 group = "hexlet.code"
@@ -13,6 +14,13 @@ repositories {
 
 application {
     mainClass = "hexlet.code.App"
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "User57134_java-project-71")
+        property("sonar.organization", "user57134")
+    }
 }
 
 dependencies {
