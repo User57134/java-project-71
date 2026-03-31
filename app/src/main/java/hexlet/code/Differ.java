@@ -75,17 +75,14 @@ class Differ implements Callable<Integer> {
         var res2 = content2
                 .entrySet()
                 .stream()
-                .filter(el -> {
-                    return ((!content1.containsKey(el.getKey()))
-                            || (!el.getValue().equals(content1.get(el.getKey()))));
-                })
+                .filter(el -> ((!content1.containsKey(el.getKey()))
+                            || (!el.getValue().equals(content1.get(el.getKey())))))
                 // make a map with a surrogate keys (_p) to sort it by value with the special rules:
                 // - first is a line without changes
                 // - second is a removed line
                 // - third is an added line
-                .collect(Collectors.toMap(el -> {
-                    return el.getKey() + "_p";
-                }, el -> el.getKey() + ": " + el.getValue()));
+                .collect(Collectors.toMap(el -> el.getKey() + "_p",
+                        el -> el.getKey() + ": " + el.getValue()));
 
         var result = new HashMap<String, String>();
         result.putAll(res1);
@@ -124,13 +121,6 @@ class Differ implements Callable<Integer> {
     @CommandLine.Option(names = {"-f", "--format"}, paramLabel = "FORMAT",
             description = "output format [default: stylish]")
     private String format = "stylish ";
-
-
-    private static String getFixture(String filename) throws Exception {
-        var path = Paths.get(filename).toAbsolutePath();
-        return Files.readString(path).trim();
-    }
-
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
