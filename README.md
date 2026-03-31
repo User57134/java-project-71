@@ -13,7 +13,7 @@ The project for comparing two files and get differences. A CLI is used to intera
 
 ## Setup
 ```bash
-make run-dist
+make build
 ```
 
 ## Run
