@@ -14,5 +14,5 @@ jobs:
           java-version: 21
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
-      - run: make build
-
+      - name: Make a build commad
+        run: make build
