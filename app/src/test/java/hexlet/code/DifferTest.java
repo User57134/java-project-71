@@ -21,7 +21,6 @@ public class DifferTest {
 
         var res = Differ.generate("src/test/resources/fixtures/file1.json", "src/test/resources/fixtures/file2.json");
 
-        //assertEquals(expected, res);
-        assertEquals(1, 1);
+        assertEquals(expected, res);
     }
 }

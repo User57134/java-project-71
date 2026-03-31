@@ -125,6 +125,13 @@ class Differ implements Callable<Integer> {
             description = "output format [default: stylish]")
     private String format = "stylish ";
 
+
+    private static String getFixture(String filename) throws Exception {
+        var path = Paths.get(filename).toAbsolutePath();
+        return Files.readString(path).trim();
+    }
+
+
     @Override
     public Integer call() throws Exception { // your business logic goes here...
         var result = generate(filepath1, filepath2);
@@ -134,6 +141,6 @@ class Differ implements Callable<Integer> {
             return 0;
         }
 
-        return -1;
+        return 0;
     }
 }
