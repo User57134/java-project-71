@@ -15,4 +15,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
       - name: Make a build commad
+        working-directory: ./app
         run: make build
