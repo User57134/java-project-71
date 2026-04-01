@@ -1,0 +1,10 @@
+{"version": 2, "width": 308, "height": 20, "timestamp": 1775036169, "env": {"SHELL": "/bin/bash", "TERM": "xterm-256color"}}
+[0.013003, "o", "\u001b[?2004h\u001b]0;stl@DESKTOP-K5HH9FD: ~/projects/java/edu/projects/2/java-project-71/app\u0007\u001b[01;32mstl@DESKTOP-K5HH9FD\u001b[00m:\u001b[01;34m~/projects/java/edu/projects/2/java-project-71/app\u001b[00m$ "]
+[1.542441, "o", "git push -u origin"]
+[2.101397, "o", "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\u001b[K"]
+[5.758615, "o", "\u001b[7m./build/install/app/bin/app src/test/resources/fixtures/file1.yml src/test/resources/fixtures/file2.yml\u001b[27m"]
+[7.3618, "o", "\u0007\r\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C./build/install/app/bin/app src/test/resources/fixtures/file1.yml src/test/resources/fixtures/file2.yml"]
+[8.274568, "o", "\r\n\u001b[?2004l\r"]
+[8.866077, "o", "{\r\n  - follow: false\r\n    host: hexlet.io\r\n  - proxy: 123.234.53.22\r\n  - timeout: 50\r\n  + timeout: 20\r\n  + verbose: true\r\n}\r\n"]
+[8.877347, "o", "\u001b[?2004h\u001b]0;stl@DESKTOP-K5HH9FD: ~/projects/java/edu/projects/2/java-project-71/app\u0007\u001b[01;32mstl@DESKTOP-K5HH9FD\u001b[00m:\u001b[01;34m~/projects/java/edu/projects/2/java-project-71/app\u001b[00m$ "]
+[13.34706, "o", "\u001b[?2004l\r\r\nexit\r\n"]

@@ -13,9 +13,17 @@ class DifferTest {
     }
 
     @Test
-    void testGenerate() throws Exception {
+    void testGenerateJSON() throws Exception {
         var expected = getFixture("src/test/resources/fixtures/result.txt");
         var res = Differ.generate("src/test/resources/fixtures/file1.json", "src/test/resources/fixtures/file2.json");
+
+        assertEquals(expected, res);
+    }
+
+    @Test
+    void testGenerateYML() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var res = Differ.generate("src/test/resources/fixtures/file1.yml", "src/test/resources/fixtures/file2.yml");
 
         assertEquals(expected, res);
     }

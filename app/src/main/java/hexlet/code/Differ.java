@@ -2,6 +2,7 @@ package hexlet.code;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import picocli.CommandLine;
 
 import java.nio.file.Files;
@@ -12,22 +13,43 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-@CommandLine.Command(name = "gendiff", mixinStandardHelpOptions = true, version = "checksum 4.0",
-        description = "Compares two configuration files and shows a difference.")
-class Differ implements Callable<Integer> {
-    private static ObjectMapper mapper = new ObjectMapper();
 
-    private static Map<String, Object> getData(String filename) throws Exception {
+enum InputFormat {
+    JSON,
+    YAML
+}
+
+class Parser {
+
+    public static Map<String, Object> parse(String filename, InputFormat format) throws Exception {
         var p = Paths.get(filename);
         var content = Files.readString(p);
 
         if ((content == null) || (content.isEmpty())) {
-            throw new RuntimeException("Invalid argument: " + filename);
+            throw new Exception("Invalid argument: " + filename);
         }
 
-        return mapper.readValue(content, new TypeReference<Map<String, Object>>() {
-        });
+        ObjectMapper mapper;
+        switch (format) {
+            case JSON:
+                mapper = new ObjectMapper();
+                break;
+            case YAML:
+                mapper = new YAMLMapper();
+                break;
+            default:
+                throw new Exception("Wrong format of the input files");
+
+        }
+
+        return mapper.readValue(content, new TypeReference<Map<String, Object>>() { });
     }
+}
+
+
+@CommandLine.Command(name = "gendiff", mixinStandardHelpOptions = true, version = "checksum 4.0",
+        description = "Compares two configuration files and shows a difference.")
+class Differ implements Callable<Integer> {
 
     private static String diffAsString(List<String> diff) {
         StringBuilder builder = new StringBuilder();
@@ -51,8 +73,8 @@ class Differ implements Callable<Integer> {
             return null;
         }
 
-        var content1 = getData(filename1);
-        var content2 = getData(filename2);
+        var content1 = Parser.parse(filename1, InputFormat.YAML);
+        var content2 = Parser.parse(filename2, InputFormat.YAML);
 
         // lines, that were removed and lines with no changes
         var res1 = content1.entrySet()
