@@ -67,6 +67,7 @@ class Differ implements Callable<Integer> {
         return null;
     }
 
+
     private static String makeStylishDiff(List<String> diff) {
         StringBuilder builder = new StringBuilder();
 
@@ -84,22 +85,28 @@ class Differ implements Callable<Integer> {
         return builder.toString();
     }
 
-    public static String generate(String filename1, String filename2, String format) throws Exception {
-        InputFormat type = null;
+
+    private static InputFormat defineInputFormat(String filename1, String filename2) {
+        InputFormat format = null;
 
         String extension = getFileExtension(filename1);
-        if (extension != null) {
-            if (extension.equals(getFileExtension(filename2))) {
-                if (extension.equals("json")) {
-                    type = InputFormat.JSON;
-                } else if (extension.equals("yml")) {
-                    type = InputFormat.YAML;
-                }
+        if ((extension != null) && (extension.equals(getFileExtension(filename2)))) {
+            if (extension.equals("json")) {
+                format = InputFormat.JSON;
+            } else if (extension.equals("yml")) {
+                format = InputFormat.YAML;
             }
         }
 
+        return format;
+    }
+
+
+    public static String generate(String filename1, String filename2, String format) throws Exception {
+        InputFormat type = defineInputFormat(filename1, filename2);
+
         if (type == null) {
-            return null;
+            throw new Exception("Wrong input files");
         }
 
         var content1 = Parser.parse(filename1, type);
@@ -195,10 +202,7 @@ class Differ implements Callable<Integer> {
 
         var result = generate(filepath1, filepath2, format);
 
-        if (result != null) {
-            System.out.println(result);
-            return 0;
-        }
+        System.out.println(result);
 
         return 0;
     }
