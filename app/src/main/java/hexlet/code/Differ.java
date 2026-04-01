@@ -102,7 +102,7 @@ class Differ implements Callable<Integer> {
     }
 
 
-    public static String generate(String filename1, String filename2, String format) throws Exception {
+    public static String generate(String filename1, String filename2, String inputFormat) throws Exception {
         InputFormat type = defineInputFormat(filename1, filename2);
 
         if (type == null) {
@@ -174,7 +174,7 @@ class Differ implements Callable<Integer> {
                 })
                 .toList();
 
-        if (format.equals("stylish")) {
+        if (inputFormat.equals("stylish")) {
             return makeStylishDiff(diffMap);
         } else {
             return diffMap.toString();
