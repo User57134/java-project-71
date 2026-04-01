@@ -28,33 +28,23 @@ class DifferTest {
     }
 
     @Test
-    void testDiffFlatJSON() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/flat_result.txt");
-        var res = Differ.generate("src/test/resources/fixtures/file1.json", "src/test/resources/fixtures/file2.json");
+    void testDiffJSON() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var res = Differ.generate(
+                "src/test/resources/fixtures/file1.json",
+                "src/test/resources/fixtures/file2.json",
+                "stylish");
 
         assertEquals(expected, res);
     }
 
     @Test
-    void testDiffFlatYML() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/flat_result.txt");
-        var res = Differ.generate("src/test/resources/fixtures/file1.yml", "src/test/resources/fixtures/file2.yml");
-
-        assertEquals(expected, res);
-    }
-
-    @Test
-    void testDiffNestedJSON() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/nested_result.txt");
-        var res = Differ.generate("src/test/resources/fixtures/file3.json", "src/test/resources/fixtures/file4.json");
-
-        assertEquals(expected, res);
-    }
-
-    @Test
-    void testDiffNestedYML() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/nested_result.txt");
-        var res = Differ.generate("src/test/resources/fixtures/file3.yml", "src/test/resources/fixtures/file4.yml");
+    void testDiffYML() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var res = Differ.generate(
+                "src/test/resources/fixtures/file1.yml",
+                "src/test/resources/fixtures/file2.yml",
+                "stylish");
 
         assertEquals(expected, res);
     }

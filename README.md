@@ -25,5 +25,6 @@ make run-dist
 
 ## Sample:
 
-[Compare json files](https://asciinema.org/a/aeUdmLUZWBnWujrw)
-[Compare yaml files](https://asciinema.org/a/ggKLdD9aMVSxDkUK)
+[Compare json files](https://asciinema.org/a/O5SBlFXYMfKyfTXZ)
+
+[Compare yaml files](https://asciinema.org/a/k233oObuacBTqaYk)

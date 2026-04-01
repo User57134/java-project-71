@@ -19,7 +19,10 @@ enum InputFormat {
     YAML
 }
 
-class Parser {
+final class Parser {
+    private Parser() {
+
+    }
 
     public static Map<String, Object> parse(String filename, InputFormat format) throws Exception {
         var p = Paths.get(filename);
@@ -81,7 +84,7 @@ class Differ implements Callable<Integer> {
         return builder.toString();
     }
 
-    public static String generate(String filename1, String filename2) throws Exception {
+    public static String generate(String filename1, String filename2, String format) throws Exception {
         InputFormat type = null;
 
         String extension = getFileExtension(filename1);
@@ -185,12 +188,12 @@ class Differ implements Callable<Integer> {
 
     @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "stylish", paramLabel = "FORMAT",
             description = "output format [default: stylish]")
-    private static String format;
+    private String format;
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
 
-        var result = generate(filepath1, filepath2);
+        var result = generate(filepath1, filepath2, format);
 
         if (result != null) {
             System.out.println(result);
