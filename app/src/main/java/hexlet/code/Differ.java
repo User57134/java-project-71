@@ -51,7 +51,20 @@ class Parser {
         description = "Compares two configuration files and shows a difference.")
 class Differ implements Callable<Integer> {
 
-    private static String diffAsString(List<String> diff) {
+    public static String getFileExtension(String filename) {
+        if ((filename == null) || (filename.isEmpty())) {
+            return null;
+        }
+
+        int i = filename.lastIndexOf('.');
+        if (i != -1) {
+            return filename.substring(i + 1).toLowerCase();
+        }
+
+        return null;
+    }
+
+    private static String makeStylishDiff(List<String> diff) {
         StringBuilder builder = new StringBuilder();
 
         builder.append("{");
@@ -69,12 +82,25 @@ class Differ implements Callable<Integer> {
     }
 
     public static String generate(String filename1, String filename2) throws Exception {
-        if ((filename1.isEmpty()) || (filename2.isEmpty())) {
+        InputFormat type = null;
+
+        String extension = getFileExtension(filename1);
+        if (extension != null) {
+            if (extension.equals(getFileExtension(filename2))) {
+                if (extension.equals("json")) {
+                    type = InputFormat.JSON;
+                } else if (extension.equals("yml")) {
+                    type = InputFormat.YAML;
+                }
+            }
+        }
+
+        if (type == null) {
             return null;
         }
 
-        var content1 = Parser.parse(filename1, InputFormat.YAML);
-        var content2 = Parser.parse(filename2, InputFormat.YAML);
+        var content1 = Parser.parse(filename1, type);
+        var content2 = Parser.parse(filename2, type);
 
         // lines, that were removed and lines with no changes
         var res1 = content1.entrySet()
@@ -84,11 +110,17 @@ class Differ implements Callable<Integer> {
                 // - second is a removed line
                 // - third is an added line
                 .collect(Collectors.toMap(el -> {
-                    if ((content2.containsKey(el.getKey()))
-                            && (el.getValue().equals(content2.get(el.getKey())))) {
-                        return el.getKey();
+                    String key = el.getKey();
+                    Object value = el.getValue();
+
+                    if ((content2.containsKey(key))
+                            &&
+                            (((value != null) && (value.equals(content2.get(key))))
+                                    ||
+                                    ((value == null) && (content2.get(key) == null)))) {
+                        return key;
                     } else {
-                        return el.getKey() + "_m";
+                        return key + "_m";
                     }
 
                 }, el -> el.getKey() + ": " + el.getValue()));
@@ -97,8 +129,15 @@ class Differ implements Callable<Integer> {
         var res2 = content2
                 .entrySet()
                 .stream()
-                .filter(el -> ((!content1.containsKey(el.getKey()))
-                            || (!el.getValue().equals(content1.get(el.getKey())))))
+                .filter(el -> {
+                    String key = el.getKey();
+                    Object value = el.getValue();
+
+                    return ((!content1.containsKey(key))
+                            ||
+                            (((value != null) && (!value.equals(content1.get(key))))
+                                    ||
+                                    ((value == null) && (content1.get(key) != null)))); })
                 // make a map with a surrogate keys (_p) to sort it by value with the special rules:
                 // - first is a line without changes
                 // - second is a removed line
@@ -111,7 +150,7 @@ class Differ implements Callable<Integer> {
         result.putAll(res2);
 
         // make a sorted list of changes
-        var diff = result.entrySet()
+        var diffMap = result.entrySet()
                 .stream()
                 .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
                 .map(el -> {
@@ -125,7 +164,11 @@ class Differ implements Callable<Integer> {
                 })
                 .toList();
 
-        return diffAsString(diff);
+        if (format.equals("stylish")) {
+            return makeStylishDiff(diffMap);
+        } else {
+            return diffMap.toString();
+        }
     }
 
     @CommandLine.Parameters(paramLabel = "filepath1", defaultValue = "", description = "path to first file")
@@ -140,12 +183,13 @@ class Differ implements Callable<Integer> {
     @CommandLine.Option(names = {"-V", "--version"}, description = "Print version information and exit")
     private boolean version = false;
 
-    @CommandLine.Option(names = {"-f", "--format"}, paramLabel = "FORMAT",
+    @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "stylish", paramLabel = "FORMAT",
             description = "output format [default: stylish]")
-    private String format = "stylish ";
+    private static String format;
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
+
         var result = generate(filepath1, filepath2);
 
         if (result != null) {
