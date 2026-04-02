@@ -54,7 +54,7 @@ final class Parser {
         description = "Compares two configuration files and shows a difference.")
 class Differ implements Callable<Integer> {
 
-    public static String getFileExtension(String filename) {
+    static String getFileExtension(String filename) {
         if ((filename == null) || (filename.isEmpty())) {
             return null;
         }
@@ -102,7 +102,16 @@ class Differ implements Callable<Integer> {
     }
 
 
-    public static String generate(String filename1, String filename2, String inputFormat) throws Exception {
+    private static String viewDiffAs(List<String> differences, String format) {
+        if (format.equals("stylish")) {
+            return makeStylishDiff(differences);
+        } else {
+            return differences.toString();
+        }
+    }
+
+
+    public static String generate(String filename1, String filename2, String viewFormat) throws Exception {
         InputFormat type = defineInputFormat(filename1, filename2);
 
         if (type == null) {
@@ -160,7 +169,7 @@ class Differ implements Callable<Integer> {
         result.putAll(res2);
 
         // make a sorted list of changes
-        var diffMap = result.entrySet()
+        var differences = result.entrySet()
                 .stream()
                 .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
                 .map(el -> {
@@ -174,11 +183,7 @@ class Differ implements Callable<Integer> {
                 })
                 .toList();
 
-        if (inputFormat.equals("stylish")) {
-            return makeStylishDiff(diffMap);
-        } else {
-            return diffMap.toString();
-        }
+        return viewDiffAs(differences, viewFormat);
     }
 
     @CommandLine.Parameters(paramLabel = "filepath1", defaultValue = "", description = "path to first file")
