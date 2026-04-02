@@ -7,6 +7,7 @@ import picocli.CommandLine;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,13 +69,18 @@ class Differ implements Callable<Integer> {
     }
 
 
-    private static String makeStylishDiff(List<String> diff) {
-        StringBuilder builder = new StringBuilder();
+    private static String makeStylishDiff(Map<String, List<String>> differences) {
+        var sortedDifferencesList = differences.entrySet()
+                .stream()
+                .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
+                .flatMap(el -> el.getValue().stream())
+                .toList();
 
+        StringBuilder builder = new StringBuilder();
         builder.append("{");
         builder.append("\n");
 
-        for (var line : diff) {
+        for (var line : sortedDifferencesList) {
             builder.append("  ");
             builder.append(line);
             builder.append("\n");
@@ -83,6 +89,11 @@ class Differ implements Callable<Integer> {
         builder.append("}");
 
         return builder.toString();
+    }
+
+
+    private static String makePlainDiff(Map<String, List<String>> differences) {
+        return null;
     }
 
 
@@ -102,7 +113,7 @@ class Differ implements Callable<Integer> {
     }
 
 
-    private static String viewDiffAs(List<String> differences, String format) {
+    private static String viewDiffAs(Map<String, List<String>> differences, String format) {
         if (format.equals("stylish")) {
             return makeStylishDiff(differences);
         } else {
@@ -121,30 +132,34 @@ class Differ implements Callable<Integer> {
         var content1 = Parser.parse(filename1, type);
         var content2 = Parser.parse(filename2, type);
 
-        // lines, that were removed and lines with no changes
+        // make a map with a List<String> as value:
+        // - first is a line without changes
+        // - second is a removed line
         var res1 = content1.entrySet()
                 .stream()
-                // make a map with a surrogate keys (_m) to sort it by value with the special rules:
-                // - first is a line without changes
-                // - second is a removed line
-                // - third is an added line
-                .collect(Collectors.toMap(el -> {
-                    String key = el.getKey();
-                    Object value = el.getValue();
+                .collect(Collectors.toMap(
+                        el -> el.getKey(),
+                        el -> {
+                            var result = new ArrayList<String>();
+                            String key = el.getKey();
+                            Object value = el.getValue();
 
-                    if ((content2.containsKey(key))
-                            &&
-                            (((value != null) && (value.equals(content2.get(key))))
-                                    ||
-                                    ((value == null) && (content2.get(key) == null)))) {
-                        return key;
-                    } else {
-                        return key + "_m";
-                    }
+                            if ((content2.containsKey(key))
+                                    &&
+                                    (((value != null) && (value.equals(content2.get(key))))
+                                            || ((value == null) && (content2.get(key) == null)))) {
+                                result.add("  " + key + ": " + value);
+                            } else {
+                                result.add("- " + key + ": " + value);
+                            }
+                            return result; },
+                        (list1, list2) -> {
+                            list1.addAll(list2);
+                            return list1;
+                        }));
 
-                }, el -> el.getKey() + ": " + el.getValue()));
-
-        // lines, that were added
+        // make a map with a List<String> as value:
+        // - third is an added line
         var res2 = content2
                 .entrySet()
                 .stream()
@@ -157,33 +172,27 @@ class Differ implements Callable<Integer> {
                             (((value != null) && (!value.equals(content1.get(key))))
                                     ||
                                     ((value == null) && (content1.get(key) != null)))); })
-                // make a map with a surrogate keys (_p) to sort it by value with the special rules:
-                // - first is a line without changes
-                // - second is a removed line
-                // - third is an added line
-                .collect(Collectors.toMap(el -> el.getKey() + "_p",
-                        el -> el.getKey() + ": " + el.getValue()));
+                .collect(Collectors.toMap(
+                        el -> el.getKey(),
+                        el -> {
+                            var result = new ArrayList<String>();
+                            result.add("+ " + el.getKey() + ": " + el.getValue());
+                            return result; }));
 
-        var result = new HashMap<String, String>();
-        result.putAll(res1);
-        result.putAll(res2);
+        // make a map with a List<String> as value:
+        // - first is a line without changes
+        // - second is a removed line
+        // - third is an added line
+        var result = new HashMap<String, List<String>>(res1);
+        res2.forEach((k, v) -> {
+            if (result.containsKey(k)) {
+                result.get(k).addAll(v);
+            } else {
+                result.put(k, v);
+            }
+        });
 
-        // make a sorted list of changes
-        var differences = result.entrySet()
-                .stream()
-                .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
-                .map(el -> {
-                    if (el.getKey().endsWith("_m")) {
-                        return "- " + el.getValue();
-                    } else if (el.getKey().endsWith("_p")) {
-                        return "+ " + el.getValue();
-                    } else {
-                        return "  " + el.getValue();
-                    }
-                })
-                .toList();
-
-        return viewDiffAs(differences, viewFormat);
+        return viewDiffAs(result, viewFormat);
     }
 
     @CommandLine.Parameters(paramLabel = "filepath1", defaultValue = "", description = "path to first file")
@@ -204,10 +213,14 @@ class Differ implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
+        //filepath1 = "src/test/resources/fixtures/file1.json";
+        //filepath2 = "src/test/resources/fixtures/file2.json";
 
         var result = generate(filepath1, filepath2, format);
 
-        System.out.println(result);
+        if (result != null) {
+            System.out.println(result);
+        }
 
         return 0;
     }
