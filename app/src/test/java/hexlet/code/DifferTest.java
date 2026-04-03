@@ -29,7 +29,7 @@ class DifferTest {
 
     @Test
     void testDiffJsonStylish() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var expected = getFixture("src/test/resources/fixtures/result_stylish.txt");
         var res = Differ.generate(
                 "src/test/resources/fixtures/file1.json",
                 "src/test/resources/fixtures/file2.json",
@@ -40,7 +40,7 @@ class DifferTest {
 
     @Test
     void testDiffYmlStylish() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var expected = getFixture("src/test/resources/fixtures/result_stylish.txt");
         var res = Differ.generate(
                 "src/test/resources/fixtures/file1.yml",
                 "src/test/resources/fixtures/file2.yml",
@@ -51,7 +51,7 @@ class DifferTest {
 
     @Test
     void testDiffJsonPlain() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var expected = getFixture("src/test/resources/fixtures/result_plain.txt");
         var res = Differ.generate(
                 "src/test/resources/fixtures/file1.json",
                 "src/test/resources/fixtures/file2.json",
@@ -62,7 +62,7 @@ class DifferTest {
 
     @Test
     void testDiffYmlPlain() throws Exception {
-        var expected = getFixture("src/test/resources/fixtures/result.txt");
+        var expected = getFixture("src/test/resources/fixtures/result_plain.txt");
         var res = Differ.generate(
                 "src/test/resources/fixtures/file1.yml",
                 "src/test/resources/fixtures/file2.yml",
