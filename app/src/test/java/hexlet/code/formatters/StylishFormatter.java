@@ -3,8 +3,10 @@ package hexlet.code.formatters;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class StylishFormatter {
-    public static String makeStylishDiff(Map<String, HashMap<String, Object>> differences) {
+public final class StylishFormatter implements hexlet.code.Formatter {
+
+    @Override
+    public String formate(Map<String, HashMap<String, Object>> differences) {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
                 .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
