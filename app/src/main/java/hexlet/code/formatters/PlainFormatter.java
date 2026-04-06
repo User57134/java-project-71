@@ -36,25 +36,24 @@ public final class PlainFormatter implements hexlet.code.Formatter {
                 .stream()
                 .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
                 .map(el -> {
-                    String message = null;
+                    String message = "Property '";
 
                     var key = el.getKey();
                     var changes = el.getValue();
                     if (changes.size() == 2) {
                         String previousValue = makePlainValue(changes.get("-"));
                         String actualValue = makePlainValue(changes.get("+"));
-                        return "Property '" + key + "' was updated. From " + previousValue + " to " + actualValue;
+                        message += key + "' was updated. From " + previousValue + " to " + actualValue;
                     } else if (changes.size() == 1) {
                         var changesEntry = changes.entrySet().stream().findAny().get();
 
                         switch (changesEntry.getKey()) {
                             case "+":
-                                message = "Property '" + key + "' was added with value: "
-                                        + makePlainValue(changesEntry.getValue());
+                                message += key + "' was added with value: " + makePlainValue(changesEntry.getValue());
                                 break;
 
                             case "-":
-                                message = "Property '" + key + "' was removed";
+                                message += key + "' was removed";
                                 break;
 
                             default:

@@ -107,7 +107,7 @@ class Differ implements Callable<Integer> {
         var res1 = content1.entrySet()
                 .stream()
                 .collect(Collectors.toMap(
-                        el -> el.getKey(),
+                        Map.Entry::getKey,
                         el -> {
                             var result = new HashMap<String, Object>();
                             String key = el.getKey();
@@ -142,7 +142,7 @@ class Differ implements Callable<Integer> {
                                     ||
                                     ((value == null) && (content1.get(key) != null)))); })
                 .collect(Collectors.toMap(
-                        el -> el.getKey(),
+                        Map.Entry::getKey,
                         el -> {
                             var result = new HashMap<String, Object>();
                             result.put("+", el.getValue());
