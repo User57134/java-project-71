@@ -8,7 +8,7 @@ public final class StylishFormatter implements hexlet.code.Formatter {
 
 
     public StylishFormatter() {
-
+        // to use as a Formatter interface needs to create an object
     }
 
 
@@ -21,9 +21,7 @@ public final class StylishFormatter implements hexlet.code.Formatter {
                         .entrySet()
                         .stream()
                         .sorted((e1, e2) -> e2.getKey().compareTo(e1.getKey()))
-                        .map(el -> {
-                            return el.getKey() + " " + e.getKey() + ": " + el.getValue();
-                        }))
+                        .map(el -> el.getKey() + " " + e.getKey() + ": " + el.getValue()))
                 .toList();
 
         StringBuilder builder = new StringBuilder();

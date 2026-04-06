@@ -54,11 +54,6 @@ final class Parser {
         description = "Compares two configuration files and shows a difference.")
 class Differ implements Callable<Integer> {
 
-    private static String getFixture(String filename) throws Exception {
-        var path = Paths.get(filename).toAbsolutePath();
-        return Files.readString(path).trim();
-    }
-
 
     static String getFileExtension(String filename) {
         if ((filename == null) || (filename.isEmpty())) {
@@ -106,7 +101,7 @@ class Differ implements Callable<Integer> {
         var content1 = Parser.parse(filename1, type);
         var content2 = Parser.parse(filename2, type);
 
-        // make a map with a List<String> as value:
+        // make a map with a Map<String, Object> as value:
         // - first is a line without changes
         // - second is a removed line
         var res1 = content1.entrySet()
@@ -132,7 +127,7 @@ class Differ implements Callable<Integer> {
                             return map1;
                         }));
 
-        // make a map with a List<String> as value:
+        // make a map with a Map<String, Object> as value:
         // - third is an added line
         var res2 = content2
                 .entrySet()
@@ -153,7 +148,7 @@ class Differ implements Callable<Integer> {
                             result.put("+", el.getValue());
                             return result; }));
 
-        // make a map with a List<String> as value:
+        // make a map with a Map<String, Object> as value:
         // - first is a line without changes
         // - second is a removed line
         // - third is an added line
@@ -187,10 +182,6 @@ class Differ implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
-        //filepath1 = "src/test/resources/fixtures/file1.json";
-        //filepath2 = "src/test/resources/fixtures/file2.json";
-        //format = "plain";
-
         var result = generate(filepath1, filepath2, format);
 
         if (result != null) {

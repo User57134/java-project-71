@@ -6,7 +6,7 @@ import java.util.Map;
 public final class PlainFormatter implements hexlet.code.Formatter {
 
     public PlainFormatter() {
-
+        // to use as a Formatter interface needs to create an object
     }
 
     private static String makePlainValue(Object value) {
@@ -14,14 +14,12 @@ public final class PlainFormatter implements hexlet.code.Formatter {
             return "null";
         }
 
-        if (value instanceof Boolean) {
-            Boolean res = (Boolean) value;
-            return res.toString();
+        if (value instanceof Boolean bValue) {
+            return bValue.toString();
         }
 
-        if (value instanceof Number) {
-            Number res = (Number) value;
-            return res.toString();
+        if (value instanceof Number nValue) {
+            return nValue.toString();
         }
 
         String res = value.toString();
@@ -76,5 +74,5 @@ public final class PlainFormatter implements hexlet.code.Formatter {
 
         builder.deleteCharAt(builder.length() - 1);
         return builder.toString();
-    };
+    }
 }

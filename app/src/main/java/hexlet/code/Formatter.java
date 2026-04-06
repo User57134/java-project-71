@@ -13,6 +13,11 @@ public interface Formatter {
 
 final class Formatters {
 
+    private Formatters() {
+
+    }
+
+
     public static Formatter getFormatter(String name) throws Exception {
         switch (name) {
             case "stylish":
