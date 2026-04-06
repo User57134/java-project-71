@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 
+
 enum FileType {
     JSON,
     YAML
@@ -23,7 +24,7 @@ final class Parser {
 
     }
 
-    public static Map<String, Object> parse(String filename, FileType format) throws Exception {
+    public static Map<String, Object> parse(String filename, FileType type) throws Exception {
         var p = Paths.get(filename);
         var content = Files.readString(p);
 
@@ -32,7 +33,7 @@ final class Parser {
         }
 
         ObjectMapper mapper;
-        switch (format) {
+        switch (type) {
             case JSON:
                 mapper = new ObjectMapper();
                 break;
@@ -40,7 +41,7 @@ final class Parser {
                 mapper = new YAMLMapper();
                 break;
             default:
-                throw new Exception("Wrong format of the input files");
+                throw new Exception("Unknown file type: " + type);
 
         }
 
@@ -89,21 +90,17 @@ class Differ implements Callable<Integer> {
     }
 
 
-    private static String viewDiffAs(Map<String, HashMap<String, Object>> differences, String format) {
-        if (format.equals("stylish")) {
-            //return makeStylishDiff(differences);
-            return null;
-        } else {
-            return null;
-            //return makePlainDiff(differences);
-        }
+    private static String viewDiffAs(Map<String, HashMap<String, Object>> differences, String format) throws Exception {
+        var formatter = Formatters.getFormatter(format);
+
+        return formatter.format(differences);
     }
 
     public static String generate(String filename1, String filename2, String viewFormat) throws Exception {
         FileType type = defineFileType(filename1, filename2);
 
         if (type == null) {
-            throw new Exception("Wrong input files");
+            throw new Exception("Wrong input files.");
         }
 
         var content1 = Parser.parse(filename1, type);
