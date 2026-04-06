@@ -28,3 +28,5 @@ make run-dist
 [Compare json files](https://asciinema.org/a/O5SBlFXYMfKyfTXZ)
 
 [Compare yaml files](https://asciinema.org/a/k233oObuacBTqaYk)
+
+[Compare files with -f option](https://asciinema.org/a/Sil8dBOgswMtGwRQ)
