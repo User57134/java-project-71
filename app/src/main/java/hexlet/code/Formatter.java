@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
 
@@ -24,6 +25,8 @@ final class Formatters {
                 return new StylishFormatter();
             case "plain":
                 return new PlainFormatter();
+            case "json":
+                return new JsonFormatter();
             default:
                 throw new Exception("There is no formatter: " + name);
         }

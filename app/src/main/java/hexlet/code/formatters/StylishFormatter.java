@@ -21,7 +21,17 @@ public final class StylishFormatter implements hexlet.code.Formatter {
                         .entrySet()
                         .stream()
                         .sorted((e1, e2) -> e2.getKey().compareTo(e1.getKey()))
-                        .map(el -> el.getKey() + " " + e.getKey() + ": " + el.getValue()))
+                        .map(el -> {
+                            var key = el.getKey();
+                            var value = el.getValue();
+
+                            if (key.equals("=")) {
+                                key = " ";
+                            }
+
+                            return key + " " + e.getKey() + ": " + value;
+
+                        }))
                 .toList();
 
         StringBuilder builder = new StringBuilder();

@@ -70,4 +70,16 @@ class DifferTest {
 
         assertEquals(expected, res);
     }
+
+    @Test
+    void testDiffJsonJson() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result_json.txt");
+        var res = Differ.generate(
+                "src/test/resources/fixtures/file1.json",
+                "src/test/resources/fixtures/file2.json",
+                "json");
+
+        assertEquals(expected, res);
+    }
+
 }
