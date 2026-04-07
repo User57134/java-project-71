@@ -91,6 +91,10 @@ public class Differ implements Callable<Integer> {
         return formatter.format(differences);
     }
 
+    public static String generate(String filename1, String filename2) throws Exception {
+        return generate(filename1, filename2, "stylish");
+    }
+
     public static String generate(String filename1, String filename2, String viewFormat) throws Exception {
         FileType type = defineFileType(filename1, filename2);
 
