@@ -10,7 +10,7 @@
 
 ## Differ java project:
 
-The project for comparing two files and get differences. A CLI is used to interact with a user.
+The project for comparing two files and get differences. A CLI is used to interact with an user.
 
 ## Setup
 ```bash
@@ -30,3 +30,5 @@ make run-dist
 [Compare yaml files](https://asciinema.org/a/k233oObuacBTqaYk)
 
 [Compare files with -f option](https://asciinema.org/a/Sil8dBOgswMtGwRQ)
+
+[Comparet files with -f json option](https://asciinema.org/a/8NmuGxukSFTy5Q4A)

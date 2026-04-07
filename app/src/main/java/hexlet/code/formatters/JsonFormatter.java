@@ -34,7 +34,10 @@ public final class JsonFormatter implements hexlet.code.Formatter {
 
             result = mapper.writer().withDefaultPrettyPrinter().writeValueAsString(sortedDifferences);
 
-        } catch (JsonProcessingException e) { }
+        } catch (JsonProcessingException e) {
+
+            // result is null
+        }
 
         return result;
     }
