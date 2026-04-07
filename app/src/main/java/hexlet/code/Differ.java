@@ -52,7 +52,7 @@ final class Parser {
 
 @CommandLine.Command(name = "gendiff", mixinStandardHelpOptions = true, version = "checksum 4.0",
         description = "Compares two configuration files and shows a difference.")
-class Differ implements Callable<Integer> {
+public class Differ implements Callable<Integer> {
 
 
     static String getFileExtension(String filename) {
