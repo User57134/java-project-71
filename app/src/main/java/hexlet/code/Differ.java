@@ -1,17 +1,15 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import picocli.CommandLine;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
-
 
 
 enum FileType {
@@ -19,41 +17,8 @@ enum FileType {
     YAML
 }
 
-final class Parser {
-    private Parser() {
 
-    }
-
-    public static Map<String, Object> parse(String filename, FileType type) throws Exception {
-        var p = Paths.get(filename);
-        var content = Files.readString(p);
-
-        if ((content == null) || (content.isEmpty())) {
-            throw new Exception("Invalid argument: " + filename);
-        }
-
-        ObjectMapper mapper;
-        switch (type) {
-            case JSON:
-                mapper = new ObjectMapper();
-                break;
-            case YAML:
-                mapper = new YAMLMapper();
-                break;
-            default:
-                throw new Exception("Unknown file type: " + type);
-
-        }
-
-        return mapper.readValue(content, new TypeReference<Map<String, Object>>() { });
-    }
-}
-
-
-@CommandLine.Command(name = "gendiff", mixinStandardHelpOptions = true, version = "checksum 4.0",
-        description = "Compares two configuration files and shows a difference.")
-public final class Differ implements Callable<Integer> {
-
+public final class Differ  {
 
     static String getFileExtension(String filename) {
         if ((filename == null) || (filename.isEmpty())) {
@@ -91,20 +56,42 @@ public final class Differ implements Callable<Integer> {
         return formatter.format(differences);
     }
 
-    public static String generate(String filename1, String filename2) throws Exception {
-        return generate(filename1, filename2, "stylish");
-    }
 
-    public static String generate(String filename1, String filename2, String viewFormat) throws Exception {
-        FileType type = defineFileType(filename1, filename2);
+    private static String getFileText(String filename) {
+        var p = Paths.get(filename);
 
-        if (type == null) {
-            throw new Exception("Wrong input files.");
+        String content = null;
+        try {
+            content = Files.readString(p);
+        } catch (IOException e) {
+            // null is returned
         }
 
-        var content1 = Parser.parse(filename1, type);
-        var content2 = Parser.parse(filename2, type);
+        return content;
+    }
 
+
+    private static ObjectMapper getMapper(FileType type) throws Exception {
+        ObjectMapper mapper = null;
+
+        switch (type) {
+            case JSON:
+                mapper = new ObjectMapper();
+                break;
+            case YAML:
+                mapper = new YAMLMapper();
+                break;
+            default:
+                throw new Exception("Unknown file type: " + type);
+
+        }
+
+        return mapper;
+    }
+
+
+    private static Map<String, HashMap<String, Object>> analyzeDifferences(Map<String, Object> content1,
+                                                                           Map<String, Object> content2) {
         // make a map with a Map<String, Object> as value:
         // - first is a line without changes
         // - second is a removed line
@@ -165,33 +152,41 @@ public final class Differ implements Callable<Integer> {
             }
         });
 
-        return viewDiffAs(result, viewFormat);
+        return result;
     }
 
-    @CommandLine.Parameters(paramLabel = "filepath1", defaultValue = "", description = "path to first file")
-    private String filepath1;
 
-    @CommandLine.Parameters(paramLabel = "filepath2", defaultValue = "", description = "path to second file")
-    private String filepath2;
+    public static String generate(String filename1, String filename2) throws Exception {
+        return generate(filename1, filename2, "stylish");
+    }
 
-    @CommandLine.Option(names = {"-h", "--help"}, usageHelp = true, description = "Show this help message and exit")
-    private boolean help = false;
 
-    @CommandLine.Option(names = {"-V", "--version"}, description = "Print version information and exit")
-    private boolean version = false;
+    public static String generate(String filename1, String filename2, String viewFormat) throws Exception {
+        FileType type = defineFileType(filename1, filename2);
 
-    @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "stylish", paramLabel = "FORMAT",
-            description = "output format [default: stylish]")
-    private String format;
-
-    @Override
-    public Integer call() throws Exception { // your business logic goes here...
-        var result = generate(filepath1, filepath2, format);
-
-        if (result != null) {
-            System.out.println(result);
+        if (type == null) {
+            throw new Exception("Wrong input files: unknown extension.");
         }
 
-        return 0;
+        String text1 = getFileText(filename1);
+
+        if ((text1 == null) || (text1.isEmpty())) {
+            throw new Exception("Wrong input data: " + filename1 + " has no data.");
+        }
+
+        String text2 = getFileText(filename2);
+
+        if ((text2 == null) || (text2.isEmpty())) {
+            throw new Exception("Wrong input data: " + filename2 + " has no data.");
+        }
+
+        Parser parser = new Parser(getMapper(type));
+
+        var content1 = parser.parse(text1);
+        var content2 = parser.parse(text2);
+
+        var result = analyzeDifferences(content1, content2);
+
+        return viewDiffAs(result, viewFormat);
     }
 }
