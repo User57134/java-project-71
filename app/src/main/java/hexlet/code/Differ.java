@@ -19,6 +19,11 @@ enum FileType {
 
 
 public final class Differ  {
+    public static final String DEFAULT_OUT_FORMAT = "stylish";
+
+    private Differ() {
+
+    }
 
     static String getFileExtension(String filename) {
         if ((filename == null) || (filename.isEmpty())) {
@@ -157,7 +162,7 @@ public final class Differ  {
 
 
     public static String generate(String filename1, String filename2) throws Exception {
-        return generate(filename1, filename2, "stylish");
+        return generate(filename1, filename2, DEFAULT_OUT_FORMAT);
     }
 
 

@@ -12,6 +12,7 @@ class DifferTest {
         return Files.readString(path).trim();
     }
 
+
     @Test
     void getFileExtensionTest() {
         var filename = "file.JSON";
@@ -27,6 +28,7 @@ class DifferTest {
         assertEquals(expected, actual);
     }
 
+
     @Test
     void testDiffJsonStylish() throws Exception {
         var expected = getFixture("src/test/resources/fixtures/result_stylish.txt");
@@ -37,6 +39,7 @@ class DifferTest {
 
         assertEquals(expected, res);
     }
+
 
     @Test
     void testDiffYmlStylish() throws Exception {
@@ -49,6 +52,7 @@ class DifferTest {
         assertEquals(expected, res);
     }
 
+
     @Test
     void testDiffJsonPlain() throws Exception {
         var expected = getFixture("src/test/resources/fixtures/result_plain.txt");
@@ -59,6 +63,7 @@ class DifferTest {
 
         assertEquals(expected, res);
     }
+
 
     @Test
     void testDiffYmlPlain() throws Exception {
@@ -71,6 +76,7 @@ class DifferTest {
         assertEquals(expected, res);
     }
 
+
     @Test
     void testDiffJsonJson() throws Exception {
         var expected = getFixture("src/test/resources/fixtures/result_json.txt");
@@ -78,6 +84,40 @@ class DifferTest {
                 "src/test/resources/fixtures/file1.json",
                 "src/test/resources/fixtures/file2.json",
                 "json");
+
+        assertEquals(expected, res);
+    }
+
+
+    @Test
+    void testDiffYmlJson() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result_json.txt");
+        var res = Differ.generate(
+                "src/test/resources/fixtures/file1.yml",
+                "src/test/resources/fixtures/file2.yml",
+                "json");
+
+        assertEquals(expected, res);
+    }
+
+
+    @Test
+    void testDiffJsonDefault() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result_stylish.txt");
+        var res = Differ.generate(
+                "src/test/resources/fixtures/file1.json",
+                "src/test/resources/fixtures/file2.json");
+
+        assertEquals(expected, res);
+    }
+
+
+    @Test
+    void testDiffYmlDefault() throws Exception {
+        var expected = getFixture("src/test/resources/fixtures/result_stylish.txt");
+        var res = Differ.generate(
+                "src/test/resources/fixtures/file1.yml",
+                "src/test/resources/fixtures/file2.yml");
 
         assertEquals(expected, res);
     }
