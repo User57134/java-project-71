@@ -20,6 +20,10 @@ final class Formatters {
 
 
     public static Formatter getFormatter(String name) throws Exception {
+        if (name == null) {
+            throw new Exception("A format is not specified: null");
+        }
+
         switch (name) {
             case "stylish":
                 return new StylishFormatter();
@@ -28,7 +32,7 @@ final class Formatters {
             case "json":
                 return new JsonFormatter();
             default:
-                throw new Exception("There is no formatter: " + name);
+                throw new Exception("There is no formatter for " + name);
         }
     }
 }

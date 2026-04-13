@@ -3,7 +3,7 @@ package hexlet.code;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FormatterTest {
+class FormatterTest {
 
     @Test
     void getFormatterTest() throws Exception {
@@ -19,6 +19,14 @@ public class FormatterTest {
         formatter = null;
         try {
             formatter = Formatters.getFormatter("other");
+        } catch (Exception ex) {
+            // nothing
+        }
+        assertEquals(null, formatter);
+
+        formatter = null;
+        try {
+            formatter = Formatters.getFormatter(null);
         } catch (Exception ex) {
             // nothing
         }
