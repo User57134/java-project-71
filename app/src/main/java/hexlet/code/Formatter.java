@@ -4,11 +4,10 @@ import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.TreeMap;
 
 public interface Formatter {
-    String format(Map<String, HashMap<String, Object>> differences);
+    String format(TreeMap<String, TreeMap<String, Object>> differences) throws Exception;
 }
 
 

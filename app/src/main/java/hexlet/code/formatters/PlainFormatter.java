@@ -1,7 +1,7 @@
 package hexlet.code.formatters;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.TreeMap;
 
 public final class PlainFormatter implements hexlet.code.Formatter {
 
@@ -22,19 +22,17 @@ public final class PlainFormatter implements hexlet.code.Formatter {
             return nValue.toString();
         }
 
-        String res = value.toString();
-        if ((res.charAt(0) != '[') && (res.charAt(0) != '{')) {
-            return "'" + value + "'";
-        } else {
+        if (value instanceof List || value instanceof java.util.Map) {
             return "[complex value]";
+        } else {
+            return "'" + value + "'";
         }
     }
 
     @Override
-    public String format(Map<String, HashMap<String, Object>> differences) {
+    public String format(TreeMap<String, TreeMap<String, Object>> differences) throws Exception {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
-                .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
                 .map(el -> {
                     String message = "Property '";
 

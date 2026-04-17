@@ -1,7 +1,6 @@
 package hexlet.code.formatters;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.TreeMap;
 
 
 public final class StylishFormatter implements hexlet.code.Formatter {
@@ -11,16 +10,13 @@ public final class StylishFormatter implements hexlet.code.Formatter {
         // to use as a Formatter interface needs to create an object
     }
 
-
     @Override
-    public String format(Map<String, HashMap<String, Object>> differences) {
+    public String format(TreeMap<String, TreeMap<String, Object>> differences) throws Exception {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
-                .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
                 .flatMap(e -> e.getValue()
                         .entrySet()
                         .stream()
-                        .sorted((e1, e2) -> e2.getKey().compareTo(e1.getKey()))
                         .map(el -> {
                             var key = el.getKey();
                             var value = el.getValue();
