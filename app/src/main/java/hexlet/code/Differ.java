@@ -4,6 +4,7 @@ package hexlet.code;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 
@@ -50,7 +51,7 @@ public final class Differ  {
     }
 
 
-    private static String viewDiffAs(TreeMap<String, TreeMap<String, Object>> differences,
+    private static String viewDiffAs(SortedMap<String, TreeMap<String, Object>> differences,
                                      String format) throws Exception {
 
         var formatter = Formatters.getFormatter(format);

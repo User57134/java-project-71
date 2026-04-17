@@ -1,5 +1,6 @@
 package hexlet.code.formatters;
 
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 
@@ -11,7 +12,7 @@ public final class StylishFormatter implements hexlet.code.Formatter {
     }
 
     @Override
-    public String format(TreeMap<String, TreeMap<String, Object>> differences) throws Exception {
+    public String format(SortedMap<String, TreeMap<String, Object>> differences) throws Exception {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
                 .flatMap(e -> e.getValue()

@@ -2,14 +2,18 @@ package hexlet.code;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 
-public class DifferenceAnalyzer {
+public final class DifferenceAnalyzer {
+    private DifferenceAnalyzer() {
 
-    public static TreeMap<String, TreeMap<String, Object>> analyze(Map<String, Object> content1,
-                                                                    Map<String, Object> content2) {
+    }
+
+    public static SortedMap<String, TreeMap<String, Object>> analyze(Map<String, Object> content1,
+                                                                         Map<String, Object> content2) {
         // make a map with a Map<String, Object> as value:
         // - first is a line without changes
         // - second is a removed line

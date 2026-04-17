@@ -1,6 +1,8 @@
 package hexlet.code.formatters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 
@@ -11,7 +13,7 @@ public final class JsonFormatter implements hexlet.code.Formatter {
     }
 
     @Override
-    public String format(TreeMap<String, TreeMap<String, Object>> differences) throws Exception {
+    public String format(SortedMap<String, TreeMap<String, Object>> differences) throws Exception {
         String result = null;
 
         ObjectMapper mapper = new ObjectMapper();

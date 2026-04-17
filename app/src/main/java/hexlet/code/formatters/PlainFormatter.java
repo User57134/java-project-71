@@ -1,6 +1,7 @@
 package hexlet.code.formatters;
 
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 public final class PlainFormatter implements hexlet.code.Formatter {
@@ -30,7 +31,7 @@ public final class PlainFormatter implements hexlet.code.Formatter {
     }
 
     @Override
-    public String format(TreeMap<String, TreeMap<String, Object>> differences) throws Exception {
+    public String format(SortedMap<String, TreeMap<String, Object>> differences) throws Exception {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
                 .map(el -> {
