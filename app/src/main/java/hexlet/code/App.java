@@ -26,10 +26,6 @@ public final class App implements Callable<Integer>  {
 
     @Override
     public Integer call() throws Exception { // your business logic goes here...
-        //filepath1 = "src/test/resources/fixtures/file1.json";
-        //filepath2 = "src/test/resources/fixtures/file2.json";
-        //format = "plain";
-
         var result = Differ.generate(filepath1, filepath2, format);
 
         if (result != null) {
