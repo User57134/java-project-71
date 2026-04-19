@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.SortedMap;
+import java.util.SequencedMap;
 
 
 public final class Differ  {
@@ -47,7 +47,7 @@ public final class Differ  {
     }
 
 
-    private static String viewDiffAs(SortedMap<String, SortedMap<String, Object>> differences,
+    private static String viewDiffAs(SequencedMap<String, SequencedMap<String, Object>> differences,
                                      String format) throws Exception {
 
         var formatter = Formatters.getFormatter(format);

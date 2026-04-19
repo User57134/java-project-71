@@ -1,19 +1,24 @@
 package hexlet.code;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.SequencedMap;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
+import java.util.Collections;
 
 
 public final class DifferenceAnalyzer {
+
     private DifferenceAnalyzer() {
 
     }
 
-    public static SortedMap<String, SortedMap<String, Object>> analyze(Map<String, Object> content1,
-                                                                       Map<String, Object> content2) {
+    public static SortedMap<String, SortedMap<String, Object>> analyzeOld(Map<String, Object> content1,
+                                                                          Map<String, Object> content2) {
         // make a map with a Map<String, Object> as value:
         // - first is a line without changes
         // - second is a removed line
@@ -73,6 +78,46 @@ public final class DifferenceAnalyzer {
                 result.put(k, v);
             }
         });
+
+        return result;
+    }
+
+
+    public static SequencedMap<String, SequencedMap<String, Object>> analyze(Map<String, Object> content1,
+                                                                             Map<String, Object> content2) {
+        //sort
+        Set<String> set = new TreeSet<>(content1.keySet());
+        Set<String> set2 = new TreeSet<>(content2.keySet());
+        set.addAll(set2);
+
+        var result = new LinkedHashMap<String, SequencedMap<String, Object>>();
+
+        for (String key : set) {
+            var changes = new LinkedHashMap<String, Object>();
+
+            if (content1.containsKey(key)) {
+                var value1 = content1.get(key);
+
+                if (content2.containsKey(key)) {
+                    var value2 = content2.get(key);
+
+                    if (((value1 != null) && (value1.equals(value2)))
+                            || ((value1 == null) && (value2 == null))) {
+                        changes.put("=", value1);
+                    } else {
+                        changes.put("-", value1);
+                        changes.put("+", value2);
+                    }
+                } else {
+                    changes.put("-", value1);
+                }
+
+            } else if (content2.containsKey(key)) {
+                changes.put("+", content2.get(key));
+            }
+
+            result.put(key, changes);
+        }
 
         return result;
     }
