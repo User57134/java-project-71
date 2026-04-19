@@ -1,17 +1,13 @@
 package hexlet.code;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.SortedMap;
-import java.util.TreeMap;
-
-
-enum FileType {
-    JSON,
-    YAML
-}
 
 
 public final class Differ  {
@@ -51,7 +47,7 @@ public final class Differ  {
     }
 
 
-    private static String viewDiffAs(SortedMap<String, TreeMap<String, Object>> differences,
+    private static String viewDiffAs(SortedMap<String, SortedMap<String, Object>> differences,
                                      String format) throws Exception {
 
         var formatter = Formatters.getFormatter(format);
@@ -91,10 +87,20 @@ public final class Differ  {
             throw new Exception("Wrong input data: " + filename2 + " has no data.");
         }
 
-        Parser parser = new Parser(fileType);
+        ObjectMapper mapper = null;
+        switch (fileType) {
+            case JSON:
+                mapper = new ObjectMapper();
+                break;
+            case YAML:
+                mapper = new YAMLMapper();
+                break;
+            default:
+                throw new RuntimeException("Unknown file type: " + fileType);
+        }
 
-        var content1 = parser.parse(text1);
-        var content2 = parser.parse(text2);
+        var content1 = Parser.parse(text1, mapper);
+        var content2 = Parser.parse(text2, mapper);
 
         var result = DifferenceAnalyzer.analyze(content1, content2);
 

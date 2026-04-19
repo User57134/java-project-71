@@ -2,7 +2,7 @@ package hexlet.code.formatters;
 
 import java.util.List;
 import java.util.SortedMap;
-import java.util.TreeMap;
+
 
 public final class PlainFormatter implements hexlet.code.Formatter {
 
@@ -31,7 +31,7 @@ public final class PlainFormatter implements hexlet.code.Formatter {
     }
 
     @Override
-    public String format(SortedMap<String, TreeMap<String, Object>> differences) throws Exception {
+    public String format(SortedMap<String, SortedMap<String, Object>> differences) {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
                 .map(el -> {
@@ -55,8 +55,12 @@ public final class PlainFormatter implements hexlet.code.Formatter {
                                 message += key + "' was removed";
                                 break;
 
-                            default:
+                            case "=":
                                 message = "";
+                                break;
+
+                            default:
+                                throw new RuntimeException("Unexpected key for : " + key);
                         }
                     }
 

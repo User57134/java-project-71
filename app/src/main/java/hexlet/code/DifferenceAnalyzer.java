@@ -12,8 +12,8 @@ public final class DifferenceAnalyzer {
 
     }
 
-    public static SortedMap<String, TreeMap<String, Object>> analyze(Map<String, Object> content1,
-                                                                         Map<String, Object> content2) {
+    public static SortedMap<String, SortedMap<String, Object>> analyze(Map<String, Object> content1,
+                                                                       Map<String, Object> content2) {
         // make a map with a Map<String, Object> as value:
         // - first is a line without changes
         // - second is a removed line
@@ -65,7 +65,7 @@ public final class DifferenceAnalyzer {
         // - first is a line without changes
         // - second is a removed line
         // - third is an added line
-        var result = new TreeMap<String, TreeMap<String, Object>>(res1);
+        var result = new TreeMap<String, SortedMap<String, Object>>(res1);
         res2.forEach((k, v) -> {
             if (result.containsKey(k)) {
                 result.get(k).putAll(v);
