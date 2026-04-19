@@ -1,7 +1,9 @@
 package hexlet.code.formatters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.SequencedMap;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public final class JsonFormatter implements hexlet.code.Formatter {
@@ -11,7 +13,7 @@ public final class JsonFormatter implements hexlet.code.Formatter {
     }
 
     @Override
-    public String format(SequencedMap<String, SequencedMap<String, Object>> differences) throws Exception {
+    public String format(Map<String, LinkedHashMap<String, Object>> differences) throws Exception {
         String result = null;
 
         ObjectMapper mapper = new ObjectMapper();

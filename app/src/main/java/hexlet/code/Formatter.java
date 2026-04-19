@@ -3,11 +3,13 @@ package hexlet.code;
 import hexlet.code.formatters.JsonFormatter;
 import hexlet.code.formatters.PlainFormatter;
 import hexlet.code.formatters.StylishFormatter;
-import java.util.SequencedMap;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public interface Formatter {
-    String format(SequencedMap<String, SequencedMap<String, Object>> differences) throws Exception;
+    String format(Map<String, LinkedHashMap<String, Object>> differences) throws Exception;
 }
 
 

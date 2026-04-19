@@ -1,7 +1,8 @@
 package hexlet.code.formatters;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.SequencedMap;
+import java.util.Map;
 
 
 public final class PlainFormatter implements hexlet.code.Formatter {
@@ -31,7 +32,7 @@ public final class PlainFormatter implements hexlet.code.Formatter {
     }
 
     @Override
-    public String format(SequencedMap<String, SequencedMap<String, Object>> differences) {
+    public String format(Map<String, LinkedHashMap<String, Object>> differences) {
         var sortedDifferencesList = differences.entrySet()
                 .stream()
                 .map(el -> {

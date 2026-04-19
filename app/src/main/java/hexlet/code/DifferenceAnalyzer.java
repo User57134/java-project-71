@@ -5,7 +5,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.SequencedMap;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 import java.util.Collections;
@@ -83,14 +82,14 @@ public final class DifferenceAnalyzer {
     }
 
 
-    public static SequencedMap<String, SequencedMap<String, Object>> analyze(Map<String, Object> content1,
+    public static Map<String, LinkedHashMap<String, Object>> analyze(Map<String, Object> content1,
                                                                              Map<String, Object> content2) {
         //sort
         Set<String> set = new TreeSet<>(content1.keySet());
         Set<String> set2 = new TreeSet<>(content2.keySet());
         set.addAll(set2);
 
-        var result = new LinkedHashMap<String, SequencedMap<String, Object>>();
+        var result = new LinkedHashMap<String, LinkedHashMap<String, Object>>();
 
         for (String key : set) {
             var changes = new LinkedHashMap<String, Object>();
