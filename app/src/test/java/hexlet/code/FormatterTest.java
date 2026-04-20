@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class FormatterTest {
 
     @Test
-    void getFormatterTest() throws Exception {
+    void getFormatterTest() {
         var formatter = Formatters.getFormatter("stylish");
         assertEquals("hexlet.code.formatters.StylishFormatter", formatter.getClass().getName());
 
