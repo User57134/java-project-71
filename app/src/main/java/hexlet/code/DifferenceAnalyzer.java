@@ -24,25 +24,24 @@ public final class DifferenceAnalyzer {
         for (String key : set) {
             var changes = new LinkedHashMap<String, Object>();
 
-            if (content1.containsKey(key)) {
+            boolean inContent1 = content1.containsKey(key);
+            boolean inContent2 = content2.containsKey(key);
+
+            if (inContent1 && !inContent2) {
+                changes.put("removed", content1.get(key));
+            } else if (!inContent1 && inContent2) {
+                changes.put("added", content2.get(key));
+            } else {
                 var value1 = content1.get(key);
+                var value2 = content2.get(key);
 
-                if (content2.containsKey(key)) {
-                    var value2 = content2.get(key);
-
-                    if (((value1 != null) && (value1.equals(value2)))
-                            || ((value1 == null) && (value2 == null))) {
-                        changes.put("=", value1);
-                    } else {
-                        changes.put("-", value1);
-                        changes.put("+", value2);
-                    }
+                if ((((value1 != null) && (value1.equals(value2)))
+                        || ((value1 == null) && (value2 == null)))) {
+                    changes.put("same", value1);
                 } else {
-                    changes.put("-", value1);
+                    changes.put("removed", value1);
+                    changes.put("added", value2);
                 }
-
-            } else if (content2.containsKey(key)) {
-                changes.put("+", content2.get(key));
             }
 
             result.put(key, changes);

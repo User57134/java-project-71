@@ -1,10 +1,11 @@
 package hexlet.code.formatters;
 
+import hexlet.code.Formatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public final class StylishFormatter implements hexlet.code.Formatter {
+public final class StylishFormatter implements Formatter {
 
 
     public StylishFormatter() {
@@ -19,14 +20,10 @@ public final class StylishFormatter implements hexlet.code.Formatter {
                         .entrySet()
                         .stream()
                         .map(el -> {
-                            var key = el.getKey();
+                            var sign = Formatter.getSign(el.getKey());
                             var value = el.getValue();
 
-                            if (key.equals("=")) {
-                                key = " ";
-                            }
-
-                            return key + " " + e.getKey() + ": " + value;
+                            return sign + " " + e.getKey() + ": " + value;
 
                         }))
                 .toList();

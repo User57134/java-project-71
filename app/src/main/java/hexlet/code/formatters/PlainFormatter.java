@@ -41,22 +41,22 @@ public final class PlainFormatter implements hexlet.code.Formatter {
                     var key = el.getKey();
                     var changes = el.getValue();
                     if (changes.size() == 2) {
-                        String previousValue = makePlainValue(changes.get("-"));
-                        String actualValue = makePlainValue(changes.get("+"));
+                        String previousValue = makePlainValue(changes.get("removed"));
+                        String actualValue = makePlainValue(changes.get("added"));
                         message += key + "' was updated. From " + previousValue + " to " + actualValue;
                     } else if (changes.size() == 1) {
                         var changesEntry = changes.entrySet().stream().findAny().get();
 
                         switch (changesEntry.getKey()) {
-                            case "+":
+                            case "added":
                                 message += key + "' was added with value: " + makePlainValue(changesEntry.getValue());
                                 break;
 
-                            case "-":
+                            case "removed":
                                 message += key + "' was removed";
                                 break;
 
-                            case "=":
+                            case "same":
                                 message = "";
                                 break;
 

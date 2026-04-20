@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 public final class Parser {
-    private Parser() {
+    private ObjectMapper mapper = null;
 
+    public Parser(ObjectMapper oMapper) {
+        mapper = oMapper;
     }
 
-    public static Map<String, Object> parse(String content, ObjectMapper mapper) throws Exception {
+    public Map<String, Object> parse(String content) throws Exception {
         return mapper.readValue(content, new TypeReference<Map<String, Object>>() { });
     }
 }

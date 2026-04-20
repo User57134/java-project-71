@@ -99,8 +99,9 @@ public final class Differ  {
                 throw new RuntimeException("Unknown file type: " + fileType);
         }
 
-        var content1 = Parser.parse(text1, mapper);
-        var content2 = Parser.parse(text2, mapper);
+        Parser p = new Parser(mapper);
+        var content1 = p.parse(text1);
+        var content2 = p.parse(text2);
 
         var result = DifferenceAnalyzer.analyze(content1, content2);
 
