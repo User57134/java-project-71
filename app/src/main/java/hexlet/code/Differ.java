@@ -1,7 +1,6 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,24 +30,24 @@ public final class Differ  {
     }
 
 
-    private static FileType defineFileType(String filename1, String filename2) {
-        FileType fileType = null;
+    private static ContentFormat defineContentFormat(String filename1, String filename2) {
+        ContentFormat contentFormat = null;
 
         String extension = getFileExtension(filename1);
         if ((extension != null) && (extension.equals(getFileExtension(filename2)))) {
             if (extension.equals("json")) {
-                fileType = FileType.JSON;
+                contentFormat = ContentFormat.JSON;
             } else if (extension.equals("yml")) {
-                fileType = FileType.YAML;
+                contentFormat = ContentFormat.YAML;
             }
         }
 
-        return fileType;
+        return contentFormat;
     }
 
 
     private static String viewDiffAs(Map<String, LinkedHashMap<String, Object>> differences,
-                                     String format) throws Exception {
+                                     String format) throws JsonProcessingException {
 
         var formatter = Formatters.getFormatter(format);
 
@@ -68,40 +67,27 @@ public final class Differ  {
     }
 
 
-    public static String generate(String filename1, String filename2, String viewFormat) throws Exception {
-        FileType fileType = defineFileType(filename1, filename2);
+    public static String generate(String filename1, String filename2, String viewFormat) throws IOException {
+        ContentFormat contentFormat = defineContentFormat(filename1, filename2);
 
-        if (fileType == null) {
-            throw new Exception("Wrong input files: unknown extension.");
+        if (contentFormat == null) {
+            throw new RuntimeException("Unknown format of input files.");
         }
 
         String text1 = getFileText(filename1);
 
         if ((text1 == null) || (text1.isEmpty())) {
-            throw new Exception("Wrong input data: " + filename1 + " has no data.");
+            throw new RuntimeException("Wrong input data: " + filename1 + " has no data.");
         }
 
         String text2 = getFileText(filename2);
 
         if ((text2 == null) || (text2.isEmpty())) {
-            throw new Exception("Wrong input data: " + filename2 + " has no data.");
+            throw new RuntimeException("Wrong input data: " + filename2 + " has no data.");
         }
 
-        ObjectMapper mapper = null;
-        switch (fileType) {
-            case JSON:
-                mapper = new ObjectMapper();
-                break;
-            case YAML:
-                mapper = new YAMLMapper();
-                break;
-            default:
-                throw new RuntimeException("Unknown file type: " + fileType);
-        }
-
-        Parser p = new Parser(mapper);
-        var content1 = p.parse(text1);
-        var content2 = p.parse(text2);
+        var content1 = Parser.parse(text1, contentFormat);
+        var content2 = Parser.parse(text2, contentFormat);
 
         var result = DifferenceAnalyzer.analyze(content1, content2);
 

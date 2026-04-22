@@ -7,10 +7,23 @@ import java.util.Map;
 
 public final class StylishFormatter implements Formatter {
 
-
     public StylishFormatter() {
         // to use as a Formatter interface needs to create an object
     }
+
+    private static String getSign(String status) {
+        switch (status) {
+            case "removed":
+                return "-";
+            case "added":
+                return "+";
+            case "same":
+                return " ";
+            default:
+                throw new RuntimeException("Unknown status: " + status);
+        }
+    }
+
 
     @Override
     public String format(Map<String, LinkedHashMap<String, Object>> differences) {
@@ -20,7 +33,7 @@ public final class StylishFormatter implements Formatter {
                         .entrySet()
                         .stream()
                         .map(el -> {
-                            var sign = Formatter.getSign(el.getKey());
+                            var sign = getSign(el.getKey());
                             var value = el.getValue();
 
                             return sign + " " + e.getKey() + ": " + value;

@@ -1,6 +1,6 @@
 package hexlet.code;
 
-public enum FileType {
+public enum ContentFormat {
     JSON,
     YAML
 }
