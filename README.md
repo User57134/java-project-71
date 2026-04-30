@@ -10,7 +10,7 @@
 
 ## Differ java project:
 
-The project for comparing two files and get differences. A CLI is used to interact with an user.
+The project is for comparing two files and get differences. A CLI is used to interact with an user.
 
 ## Setup
 ```bash
